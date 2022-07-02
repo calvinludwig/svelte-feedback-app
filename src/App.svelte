@@ -1,5 +1,7 @@
 <script lang="ts">
+    import FeedbackForm from './components/FeedbackForm.svelte'
     import FeedbackList from './components/FeedbackList.svelte'
+    import FeedbackStats from './components/FeedbackStats.svelte'
     let feedback = [
         {
             id: 1,
@@ -17,8 +19,19 @@
             text: 'Voluptate aliqua consequat sunt in do officia Lorem minim enim irure anim laborum ullamco. Ad ipsum adipisicing ipsum deserunt proident minim fugiat. Ipsum elit nulla culpa Lorem non id. Ipsum voluptate ullamco ad id sunt officia enim amet culpa incididunt deserunt. Labore consectetur commodo sunt excepteur ea Lorem dolor magna id eu in duis laboris Lorem. Ad in officia anim eu. Ut cupidatat laborum elit aute commodo exercitation aute excepteur voluptate cillum irure.',
         },
     ]
+
+    $: count = feedback.length
+    $: average =
+        feedback.reduce((a, { rating }) => a + rating, 0) / feedback.length
+
+    const deleteFeedback = (e) => {
+        const itemId = e.detail
+        feedback = feedback.filter((fb) => fb.id != itemId)
+    }
 </script>
 
-<main class="max-w-xl my-6 mx-auto px-5">
-    <FeedbackList {feedback} />
+<main class="max-w-xl my-6 mx-auto px-5 text-white">
+    <FeedbackForm />
+    <FeedbackStats {count} {average} />
+    <FeedbackList {feedback} on:delete-feedback={deleteFeedback} />
 </main>
